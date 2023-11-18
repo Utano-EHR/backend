@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  # api:
+  #   image: utano-api
+  #   container_name: utano-api
+  #   build: .
+  #   ports:
+  #     - 3500:3500
+  #   env_file: .env
+  #   depends_on:
+  #     - db
+
+  db:
+    image: postgres:11.5-alpine
+    container_name: utano-db
+    ports:
+      - 5432:5432
+    env_file: .env
+    volumes:
+      - utanodata:/var/lib/postgresql/data
+
+volumes:
+  utanodata:
