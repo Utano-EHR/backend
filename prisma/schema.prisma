@@ -9,3 +9,366 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Doctor {
+  id        Int      @id @default(autoincrement())
+  firstname      String
+  lastname      String
+  email     String   @unique
+  password  String
+
+  ranks Rank[]
+  nationality String
+
+  hospital_id Int
+  hospital  Hospital @relation(fields: [hospital_id], references: [id])
+
+  speciality_id Int
+  speciality  Speciality @relation(fields: [speciality_id], references: [id])
+
+  consultations Consultation[]
+  appointments Appointment[]
+  prescriptions Prescription[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([lastname, firstname], name: "doctor_name_index")
+}
+
+model Patient {
+  id        Int      @id @default(autoincrement())
+
+  firstname      String
+  lastname      String
+
+  email     String?
+  date_of_birth DateTime
+  national_id String?
+
+  mother_national_id Int?
+  father_national_id Int?
+
+  heights Height[]
+  weights Weight[]
+
+  allergies String[]
+  chronic_conditions PatientChronicCondition[]
+  blood_group BloodGroup
+
+  nationality String
+  religion String
+
+  lab_tests PatientLabTest[]
+
+  insurance_id Int?
+  insurance Insurance? @relation(fields: [insurance_id], references: [id])
+
+  consultations Consultation[]
+  admissions Admission[]
+  appointments Appointment[]
+  prescriptions Prescription[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([lastname, firstname], name: "patient_name_index")
+}
+
+model Height {
+  id        Int      @id @default(autoincrement())
+
+  value Float
+  unit String @default("m")
+
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Weight {
+  id        Int      @id @default(autoincrement())
+
+  value Float
+  unit String @default("kg")
+
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Hospital {
+  id        Int      @id @default(autoincrement())
+
+  name      String
+
+  longitude Float
+  latitude Float
+
+  street_address   String
+  phone     String
+  email     String   @unique
+
+  city_id   Int
+  city      City     @relation(fields: [city_id], references: [id])
+
+  doctors Doctor[]
+  receptionists Receptionist[]
+  consultations Consultation[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([name], name: "hospital_name_index")
+}
+
+model Insurance {
+  id        Int      @id @default(autoincrement())
+
+  name      String   @unique
+  phone     String   @unique
+  email     String   @unique
+
+  patients Patient[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([name], name: "insurance_name_index")
+}
+
+model Speciality {
+  id        Int      @id @default(autoincrement())
+  name      String
+  doctors Doctor[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model City {
+  id        Int      @id @default(autoincrement())
+  name      String
+
+  province_id Int
+  province Province @relation(fields: [province_id], references: [id])
+
+  hospitals Hospital[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Province {
+  id        Int      @id @default(autoincrement())
+  name      String
+
+  cities City[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Receptionist {
+  id        Int      @id @default(autoincrement())
+
+  firstname      String
+  lastname      String
+  email     String   @unique
+  password  String
+
+  date_of_birth DateTime
+  national_id String
+
+  hospital_id Int
+  hospital  Hospital @relation(fields: [hospital_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([lastname, firstname], name: "receptionist_name_index")
+}
+
+model Consultation {
+  id        Int      @id @default(autoincrement())
+
+  date DateTime
+
+  doctor_id Int
+  doctor Doctor @relation(fields: [doctor_id], references: [id])
+
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+
+  hospital_id Int
+  hospital  Hospital @relation(fields: [hospital_id], references: [id])
+
+  observations String
+
+  prescription Prescription[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Prescription {
+  id        Int      @id @default(autoincrement())
+
+  date DateTime
+
+  drug String
+  quantity Int
+  unit String
+  dosage String
+  frequency String
+
+  consultation_id Int
+  consultation Consultation @relation(fields: [consultation_id], references: [id])
+
+  doctor_id Int
+  doctor Doctor @relation(fields: [doctor_id], references: [id])
+
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt  
+}
+
+model Appointment {
+  id        Int      @id @default(autoincrement())
+
+  date DateTime
+
+  doctor_id Int
+  doctor Doctor @relation(fields: [doctor_id], references: [id])
+
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt  
+}
+
+model Admission {
+  id        Int      @id @default(autoincrement())
+
+  date DateTime
+  reason String
+  form Attachment?
+
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+
+  discharge_id Int? @unique
+  discharge Discharge? @relation(fields: [discharge_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt  
+}
+
+model Discharge {
+  id        Int      @id @default(autoincrement())
+
+  date DateTime
+  form Attachment?
+
+  admission Admission?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt  
+}
+
+model LabTest {
+  id        Int      @id @default(autoincrement())
+
+  name String
+  description String
+
+  patients PatientLabTest[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model PatientLabTest {
+  id        Int      @id @default(autoincrement())
+
+  date DateTime
+  attachments Attachment[]
+
+  result String
+
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+
+  lab_test_id Int
+  lab_test LabTest @relation(fields: [lab_test_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Attachment {
+  id        Int      @id @default(autoincrement())
+  url String
+
+  patient_lab_test_id Int?
+  patient_lab_test PatientLabTest? @relation(fields: [patient_lab_test_id], references: [id])
+
+  admission_id Int? @unique
+  admission Admission? @relation(fields: [admission_id], references: [id])
+
+  discharge_id Int? @unique
+  discharge Discharge? @relation(fields: [discharge_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt  
+}
+
+model ChronicCondition {
+  id        Int      @id @default(autoincrement())
+  name String
+  patients PatientChronicCondition[] 
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([name], name: "condition_name_index")
+}
+
+model PatientChronicCondition {
+  id        Int      @id @default(autoincrement())
+
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+
+  chronic_condition_id Int
+  chronic_condition ChronicCondition @relation(fields: [chronic_condition_id], references: [id])
+
+  date_of_diagnosis DateTime
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Rank {
+  id        Int      @id @default(autoincrement())
+  name String
+
+  doctors Doctor[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum BloodGroup {
+  A
+  B
+  AB
+  O
+}
