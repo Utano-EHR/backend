@@ -17,7 +17,6 @@ model Doctor {
   email     String   @unique
   password  String
 
-  ranks Rank[]
   nationality String
 
   hospital_id Int
@@ -79,7 +78,7 @@ model Height {
   id        Int      @id @default(autoincrement())
 
   value Float
-  unit String @default("m")
+  unit String @default("cm")
 
   patient_id Int
   patient Patient @relation(fields: [patient_id], references: [id])
@@ -209,7 +208,7 @@ model Consultation {
 
   observations String
 
-  prescription Prescription[]
+  prescriptions Prescription[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -351,16 +350,6 @@ model PatientChronicCondition {
   chronic_condition ChronicCondition @relation(fields: [chronic_condition_id], references: [id])
 
   date_of_diagnosis DateTime
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model Rank {
-  id        Int      @id @default(autoincrement())
-  name String
-
-  doctors Doctor[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
