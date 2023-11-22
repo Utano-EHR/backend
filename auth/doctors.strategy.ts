@@ -12,7 +12,7 @@ export class DoctorsStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(username: string, password: string): Promise<{}> {
-    // TODO: Implement your own validation logic here
+     TODO: //yet to ask
     return { username };
   }
 }
