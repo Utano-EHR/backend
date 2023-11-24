@@ -67,6 +67,7 @@ model Patient {
   admissions Admission[]
   appointments Appointment[]
   prescriptions Prescription[]
+  observations Observation[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -83,6 +84,9 @@ model Height {
   patient_id Int
   patient Patient @relation(fields: [patient_id], references: [id])
 
+  observation_id Int @unique
+  observation Observation @relation(fields: [observation_id], references: [id])
+
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
@@ -92,6 +96,9 @@ model Weight {
 
   value Float
   unit String @default("kg")
+
+  observation_id Int @unique
+  observation Observation @relation(fields: [observation_id], references: [id])
 
   patient_id Int
   patient Patient @relation(fields: [patient_id], references: [id])
@@ -103,10 +110,11 @@ model Weight {
 model Hospital {
   id        Int      @id @default(autoincrement())
 
-  name      String
+  name      String  @unique
+  slug      String   @unique
 
-  longitude Float
-  latitude Float
+  longitude Float?
+  latitude Float?
 
   street_address   String
   phone     String
@@ -122,7 +130,7 @@ model Hospital {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@index([name], name: "hospital_name_index")
+  @@index([slug], name: "hospital_slug_index")
 }
 
 model Insurance {
@@ -142,7 +150,8 @@ model Insurance {
 
 model Speciality {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String @unique
+  slug      String @unique
   doctors Doctor[]
 
   created_at DateTime @default(now())
@@ -151,7 +160,8 @@ model Speciality {
 
 model City {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String  @unique
+  slug      String @unique
 
   province_id Int
   province Province @relation(fields: [province_id], references: [id])
@@ -164,7 +174,8 @@ model City {
 
 model Province {
   id        Int      @id @default(autoincrement())
-  name      String
+  name      String  @unique
+  slug      String  @unique
 
   cities City[]
 
@@ -182,6 +193,7 @@ model Receptionist {
 
   date_of_birth DateTime
   national_id String
+  nationality String
 
   hospital_id Int
   hospital  Hospital @relation(fields: [hospital_id], references: [id])
@@ -353,6 +365,23 @@ model PatientChronicCondition {
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+}
+
+model Observation {
+  id        Int      @id @default(autoincrement())
+  name String
+
+  height Height?
+  weight Weight?
+
+  patient_id Int
+  patient Patient @relation(fields: [patient_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([name], name: "observation_name_index")
+
 }
 
 enum BloodGroup {
