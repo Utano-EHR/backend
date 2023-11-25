@@ -7,7 +7,7 @@ import {
 } from '@prisma/client';
 import { CoreEntity } from 'src/common/entities';
 
-export class Doctor extends CoreEntity {
+export class User extends CoreEntity {
   firstname: string;
   lastname: string;
   email: string;

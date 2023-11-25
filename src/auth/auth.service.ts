@@ -1,30 +1,97 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { Body, ForbiddenException, Injectable } from '@nestjs/common';
+import { CreateAuthDto, LoginDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
-import { CreateDoctorDto } from 'src/doctor/dto/create-doctor.dto';
 import * as argon from 'argon2';
 import { DatabaseService } from 'src/database/database.service';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly db: DatabaseService) {}
+  constructor(
+    private readonly db: DatabaseService,
+    private jwt: JwtService,
+    private config: ConfigService,
+  ) {}
 
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
-
-  async registerDoctor(dto: CreateDoctorDto) {
+  async create(dto: CreateUserDto) {
+    const { hospital_id, speciality_id } = dto;
     dto.email = dto.email.toLowerCase();
     dto.password = await argon.hash(dto.password);
 
-    const doctor = await this.db.doctor.create({
-      data: dto,
+    // IF ROLE IS DOCTOR AND NO HOSPITAL ID OR SPECIALITY ID
+    // RETURN ERROR
+    if (dto.role === 'DOCTOR' && !(hospital_id && speciality_id)) {
+      return {
+        success: false,
+        message: 'Hospital and speciality are required for doctors',
+      };
+    }
+
+    // IF ROLE IS NOT DOCTOR AND SPECIALITY ID IS SPECIFIED, RETURN ERROR
+    if (dto.role !== 'DOCTOR' && speciality_id) {
+      return {
+        success: false,
+        message: 'Only doctors can have specialities',
+      };
+    }
+
+    const user = await this.db.user.create({
+      data: {
+        ...dto,
+      },
     });
+
+    // SIGN JWT TOKEN
+    const access_token = await this.signToken(user.id, user.email);
+    delete user.password;
 
     return {
       success: true,
       message: 'Doctor registered successfully',
-      data: doctor,
+      data: { user, access_token },
+    };
+  }
+
+  /**
+   * Sign JWT Token
+   */
+  private async signToken(
+    user_id: number,
+    email: string,
+  ): Promise<string> {
+    const payload = {
+      sub: user_id,
+      email,
+    };
+    const token = await this.jwt.signAsync(payload);
+    return token;
+  }
+
+  /**
+   * Login User
+   */
+  async login(dto: LoginDto) {
+    const user = await this.db.user.findFirst({
+      where: {
+        email: dto.email.toLowerCase(),
+      },
+    });
+    if (!user) throw new ForbiddenException('Credentials incorrect');
+
+    const pwMatches = await argon.verify(user.password, dto.password);
+    if (!pwMatches) {
+      throw new ForbiddenException('Credentials incorrect');
+    }
+
+    delete user.password;
+    const access_token = await this.signToken(user.id, user.email);
+
+    return {
+      success: true,
+      message: 'login successful',
+      data: { user, access_token },
     };
   }
 
