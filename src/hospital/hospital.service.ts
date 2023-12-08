@@ -33,11 +33,40 @@ export class HospitalService {
     return `This action returns a #${id} hospital`;
   }
 
-  update(id: number, updateHospitalDto: UpdateHospitalDto) {
-    return `This action updates a #${id} hospital`;
+  /**
+   * Update Hospital Record
+   * @param id
+   * @param dto
+   * @returns
+   */
+  async update(id: number, dto: UpdateHospitalDto) {
+    if (dto.name) {
+      dto.slug = dto.name.toLowerCase().replace(/ /g, '-');
+    }
+    const hospital = await this.db.hospital.update({
+      where: {
+        id,
+      },
+      data: dto,
+    });
+
+    return {
+      success: true,
+      message: 'hospital record updated!',
+      data: { hospital },
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} hospital`;
+  async remove(id: number) {
+    const hospital = await this.db.hospital.delete({
+      where: {
+        id,
+      },
+    });
+    return {
+      success: true,
+      message: 'hospital record deleted succesfully!',
+      data: { hospital },
+    };
   }
 }

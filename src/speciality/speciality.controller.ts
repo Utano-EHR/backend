@@ -1,5 +1,15 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { SpecialityService } from './speciality.service';
+import { UpdateSpecialityDto } from './dto/update-speciality.dto';
+import { CreateSpecialityDto } from './dto/create-speciality.dto';
 
 @Controller('speciality')
 export class SpecialityController {
@@ -8,12 +18,25 @@ export class SpecialityController {
   ) {}
 
   @Post()
-  create() {
-    return this.specialityService.create();
+  create(@Body() dto: CreateSpecialityDto) {
+    return this.specialityService.create(dto);
   }
 
   @Get()
   findAll() {
     return this.specialityService.findAll();
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: number,
+    @Body() updateSpecialityDto: UpdateSpecialityDto,
+  ) {
+    return this.specialityService.update(+id, updateSpecialityDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: number) {
+    return this.specialityService.remove(+id);
   }
 }

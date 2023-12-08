@@ -10,20 +10,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Doctor {
+model User {
   id        Int      @id @default(autoincrement())
   firstname      String
   lastname      String
   email     String   @unique
   password  String
-
+  national_id String
   nationality String
 
-  hospital_id Int
-  hospital  Hospital @relation(fields: [hospital_id], references: [id])
+  role USER_ROLE
 
-  speciality_id Int
-  speciality  Speciality @relation(fields: [speciality_id], references: [id])
+  hospital_id Int?
+  hospital  Hospital? @relation(fields: [hospital_id], references: [id])
+
+  speciality_id Int?
+  speciality  Speciality? @relation(fields: [speciality_id], references: [id])
 
   consultations Consultation[]
   appointments Appointment[]
@@ -32,7 +34,14 @@ model Doctor {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  @@index([lastname, firstname], name: "doctor_name_index")
+  @@index([lastname, firstname], name: "user_name_index")
+}
+
+enum USER_ROLE {
+  DOCTOR
+  RECEPTIONIST
+  LAB_TECHNICIAN
+  PHARMACIST
 }
 
 model Patient {
@@ -43,20 +52,17 @@ model Patient {
 
   email     String?
   date_of_birth DateTime
-  national_id String?
+  national_id String? @unique
 
-  mother_national_id Int?
-  father_national_id Int?
+  mother_national_id String?
+  father_national_id String?
 
   heights Height[]
   weights Weight[]
 
   allergies String[]
   chronic_conditions PatientChronicCondition[]
-  blood_group BloodGroup
-
-  nationality String
-  religion String
+  blood_group BloodGroup?
 
   lab_tests PatientLabTest[]
 
@@ -123,8 +129,7 @@ model Hospital {
   city_id   Int
   city      City     @relation(fields: [city_id], references: [id])
 
-  doctors Doctor[]
-  receptionists Receptionist[]
+  employees User[]
   consultations Consultation[]
 
   created_at DateTime @default(now())
@@ -137,8 +142,11 @@ model Insurance {
   id        Int      @id @default(autoincrement())
 
   name      String   @unique
+  slug      String   @unique
   phone     String   @unique
   email     String   @unique
+
+  url String
 
   patients Patient[]
 
@@ -152,7 +160,7 @@ model Speciality {
   id        Int      @id @default(autoincrement())
   name      String @unique
   slug      String @unique
-  doctors Doctor[]
+  doctors User[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -183,34 +191,13 @@ model Province {
   updated_at DateTime @updatedAt
 }
 
-model Receptionist {
-  id        Int      @id @default(autoincrement())
-
-  firstname      String
-  lastname      String
-  email     String   @unique
-  password  String
-
-  date_of_birth DateTime
-  national_id String
-  nationality String
-
-  hospital_id Int
-  hospital  Hospital @relation(fields: [hospital_id], references: [id])
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  @@index([lastname, firstname], name: "receptionist_name_index")
-}
-
 model Consultation {
   id        Int      @id @default(autoincrement())
 
   date DateTime
 
   doctor_id Int
-  doctor Doctor @relation(fields: [doctor_id], references: [id])
+  doctor User @relation(fields: [doctor_id], references: [id])
 
   patient_id Int
   patient Patient @relation(fields: [patient_id], references: [id])
@@ -241,7 +228,7 @@ model Prescription {
   consultation Consultation @relation(fields: [consultation_id], references: [id])
 
   doctor_id Int
-  doctor Doctor @relation(fields: [doctor_id], references: [id])
+  doctor User @relation(fields: [doctor_id], references: [id])
 
   patient_id Int
   patient Patient @relation(fields: [patient_id], references: [id])
@@ -256,7 +243,7 @@ model Appointment {
   date DateTime
 
   doctor_id Int
-  doctor Doctor @relation(fields: [doctor_id], references: [id])
+  doctor User @relation(fields: [doctor_id], references: [id])
 
   patient_id Int
   patient Patient @relation(fields: [patient_id], references: [id])
@@ -344,6 +331,7 @@ model Attachment {
 model ChronicCondition {
   id        Int      @id @default(autoincrement())
   name String
+  slug String
   patients PatientChronicCondition[] 
 
   created_at DateTime @default(now())

@@ -1,36 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import * as fs from 'fs';
-import * as path from 'path';
+import { UpdateSpecialityDto } from './dto/update-speciality.dto';
+import { CreateSpecialityDto } from './dto/create-speciality.dto';
 
 @Injectable()
 export class SpecialityService {
   constructor(private readonly db: DatabaseService) {}
 
-  async create() {
-    const filePath = path.join(
-      __dirname,
-      '../../src/db_json/specialties.json',
-    );
-    const specialities = JSON.parse(
-      fs.readFileSync(filePath, 'utf8'),
-    );
-
-    for (const speciality of specialities) {
-      await this.db.speciality.create({
-        data: {
-          name: speciality,
-          slug: speciality.toLowerCase().replace(/ /g, '-'),
-        },
-      });
-    }
+  async create(dto: CreateSpecialityDto) {
+    dto.slug = dto.name.toLowerCase().replace(/ /g, '-');
+    const speciality = await this.db.speciality.create({
+      data: dto,
+    });
     return {
       success: true,
-      message: 'All specilities created successfully',
+      message: 'specility created successfully',
+      data: { speciality },
     };
   }
 
   findAll() {
     return `This action returns all speciality`;
+  }
+
+  async update(id: number, dto: UpdateSpecialityDto) {
+    if (dto.name) {
+      dto.slug = dto.name.toLowerCase().replace(/\s/g, '-');
+    }
+    const speciality = await this.db.speciality.update({
+      where: {
+        id,
+      },
+      data: dto,
+    });
+    return {
+      success: true,
+      message: 'speciality updated successfully!',
+      data: { speciality },
+    };
+  }
+
+  async remove(id: number) {
+    const speciality = await this.db.speciality.delete({
+      where: {
+        id,
+      },
+    });
+    return {
+      success: true,
+      message: 'speciality record deleted successfully!',
+      data: { speciality },
+    };
   }
 }
