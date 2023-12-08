@@ -1,5 +1,5 @@
-import { Body, ForbiddenException, Injectable } from '@nestjs/common';
-import { CreateAuthDto, LoginDto } from './dto/create-auth.dto';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { LoginDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import * as argon from 'argon2';
 import { DatabaseService } from 'src/database/database.service';
@@ -16,9 +16,8 @@ export class AuthService {
   ) {}
 
   async create(dto: CreateUserDto) {
-    const { hospital_id, speciality_id } = dto;
-    dto.email = dto.email.toLowerCase();
-    dto.password = await argon.hash(dto.password);
+    const hospital_id = dto.hospital_id;
+    const speciality_id = dto.speciality_id;
 
     // IF ROLE IS DOCTOR AND NO HOSPITAL ID OR SPECIALITY ID
     // RETURN ERROR
@@ -37,7 +36,13 @@ export class AuthService {
       };
     }
 
+    dto.email = dto.email.toLowerCase();
+    dto.password = await argon.hash(dto.password);
+    dto.hospital_id = hospital_id ?? undefined;
+    dto.speciality_id = speciality_id ?? undefined;
+
     const user = await this.db.user.create({
+      // @ts-ignore
       data: {
         ...dto,
       },

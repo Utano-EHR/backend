@@ -1,46 +1,14 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  IsNumber,
-  IsOptional,
-} from 'class-validator';
-import { USER_ROLE } from '@prisma/client';
+import { PickType } from '@nestjs/mapped-types';
+import { User } from '../entities/user.entity';
 
-export class CreateUserDto {
-  @IsNotEmpty()
-  @IsString()
-  firstname: string;
-
-  @IsNotEmpty()
-  @IsString()
-  lastname: string;
-
-  @IsNotEmpty()
-  @IsEmail()
-  email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  password: string;
-
-  @IsNotEmpty()
-  @IsString()
-  nationality: string;
-
-  @IsNotEmpty()
-  @IsString()
-  role: USER_ROLE;
-
-  @IsOptional()
-  @IsString()
-  national_id: string;
-
-  @IsOptional()
-  @IsNumber()
-  hospital_id: number;
-
-  @IsOptional()
-  @IsNumber()
-  speciality_id: number;
-}
+export class CreateUserDto extends PickType(User, [
+  'firstname',
+  'lastname',
+  'email',
+  'password',
+  'national_id',
+  'nationality',
+  'role',
+  'hospital_id',
+  'speciality_id',
+]) {}

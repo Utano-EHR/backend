@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateProvinceDto } from './dto/update-province.dto';
 import { DatabaseService } from '../database/database.service';
 import * as fs from 'fs';
 import * as path from 'path';
 
 @Injectable()
-export class ProvinceService {
+export class ProvinceSeed {
   constructor(private readonly db: DatabaseService) {}
-  async create() {
+  async seed() {
     const filePath = path.join(
       __dirname,
       '../../src/db_json/provinces.json',
@@ -23,25 +22,6 @@ export class ProvinceService {
       });
     }
 
-    return {
-      success: true,
-      message: 'All provinces created successfully',
-    };
-  }
-
-  findAll() {
-    return `This action returns all province`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} province`;
-  }
-
-  update(id: number, updateProvinceDto: UpdateProvinceDto) {
-    return `This action updates a #${id} province`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} province`;
+    console.log('Provinces data seeded successfully');
   }
 }

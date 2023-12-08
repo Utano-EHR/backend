@@ -6,16 +6,19 @@ import {
   Speciality,
 } from '@prisma/client';
 import { CoreEntity } from 'src/common/entities';
+import { USER_ROLE } from '@prisma/client';
 
 export class User extends CoreEntity {
   firstname: string;
   lastname: string;
   email: string;
   password?: string;
+  national_id: string;
   nationality: string;
-  hospital_id?: string;
+  role: USER_ROLE;
+  hospital_id?: number;
   hospital?: Hospital;
-  speciality_id?: string;
+  speciality_id?: number;
   speciality?: Speciality;
   consultations: Consultation[];
   appointments: Appointment[];

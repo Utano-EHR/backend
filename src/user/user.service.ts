@@ -1,26 +1,69 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+  constructor(private readonly db: DatabaseService) {}
 
   findAll() {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.db.user.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        hospital: true,
+        speciality: true,
+        consultations: true,
+        appointments: true,
+        prescriptions: true,
+      },
+    });
+    delete user.password;
+    return {
+      success: true,
+      message: 'user found!',
+      data: { user },
+    };
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, dto: UpdateUserDto) {
+    const user = await this.db.user.update({
+      where: {
+        id,
+      },
+      data: dto,
+      include: {
+        hospital: true,
+        speciality: true,
+        consultations: true,
+        appointments: true,
+        prescriptions: true,
+      },
+    });
+    delete user.password;
+    return {
+      success: true,
+      message: 'user record updated successfully!',
+      data: { user },
+    };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.db.user.delete({
+      where: {
+        id,
+      },
+    });
+    delete user.password;
+    return {
+      success: true,
+      message: 'user record deleted successfully!',
+      data: { user },
+    };
   }
 }

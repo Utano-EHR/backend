@@ -3,8 +3,8 @@ import {
   IsNotEmpty,
   IsString,
   IsOptional,
-  IsDate,
   IsArray,
+  IsNumber,
 } from 'class-validator';
 
 export class CreatePatientDto {
@@ -21,7 +21,7 @@ export class CreatePatientDto {
   email: string;
 
   @IsNotEmpty()
-  @IsDate()
+  @IsString()
   date_of_birth: Date;
 
   @IsNotEmpty()
@@ -30,21 +30,17 @@ export class CreatePatientDto {
 
   @IsOptional()
   @IsString()
-  mother_id: string;
+  mother_national_id: string;
 
   @IsOptional()
   @IsString()
-  father_id: string;
+  father_national_id: string;
 
   @IsOptional()
   @IsArray()
   allergies: string[];
 
   @IsOptional()
-  @IsArray()
-  chronic_conditions: string[];
-
-  @IsOptional()
-  @IsArray()
-  insurance_id: string;
+  @IsNumber()
+  insurance_id: number;
 }

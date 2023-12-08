@@ -32,7 +32,7 @@ export class HospitalController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateHospitalDto: UpdateHospitalDto,
   ) {
     return this.hospitalService.update(+id, updateHospitalDto);

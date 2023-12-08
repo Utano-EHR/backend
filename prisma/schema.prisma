@@ -52,17 +52,17 @@ model Patient {
 
   email     String?
   date_of_birth DateTime
-  national_id String?
+  national_id String? @unique
 
-  mother_national_id Int?
-  father_national_id Int?
+  mother_national_id String?
+  father_national_id String?
 
   heights Height[]
   weights Weight[]
 
   allergies String[]
   chronic_conditions PatientChronicCondition[]
-  blood_group BloodGroup
+  blood_group BloodGroup?
 
   lab_tests PatientLabTest[]
 
@@ -142,8 +142,11 @@ model Insurance {
   id        Int      @id @default(autoincrement())
 
   name      String   @unique
+  slug      String   @unique
   phone     String   @unique
   email     String   @unique
+
+  url String
 
   patients Patient[]
 
@@ -328,6 +331,7 @@ model Attachment {
 model ChronicCondition {
   id        Int      @id @default(autoincrement())
   name String
+  slug String
   patients PatientChronicCondition[] 
 
   created_at DateTime @default(now())
