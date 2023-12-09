@@ -1,4 +1,9 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 
 export class CreateHospitalDto {
   @IsNotEmpty()
@@ -17,7 +22,10 @@ export class CreateHospitalDto {
   @IsEmail()
   email: string;
 
-  @IsNotEmpty()
   @IsString()
   city: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  city_id: number;
 }

@@ -8,13 +8,13 @@ export class HospitalService {
   constructor(private readonly db: DatabaseService) {}
 
   async create(dto: CreateHospitalDto) {
-    const { city, ...restDto } = dto;
+    const { city_id, ...restDto } = dto;
     const data = {
       ...restDto,
       slug: dto.name.toLowerCase().replace(/ /g, '-'),
       city: {
         connect: {
-          slug: city.toLowerCase().replace(/ /g, '-'),
+          id: city_id,
         },
       },
     };
