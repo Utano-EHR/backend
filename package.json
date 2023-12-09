@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migrate:dev": "npx prisma migrate dev",
     "seed": "ts-node -r tsconfig-paths/register -r src/scripts/seed.ts",
     "reset_seq": "docker cp reset_sequence.sh utano-db:/reset_sequence.sh && docker exec -it utano-db bash /reset_sequence.sh"
   },

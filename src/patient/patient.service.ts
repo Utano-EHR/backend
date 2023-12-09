@@ -21,8 +21,25 @@ export class PatientService {
     };
   }
 
-  findAll() {
-    return `This action returns all patient`;
+  async findAll() {
+    const patients = this.db.patient.findMany({
+      include: {
+        appointments: true,
+        consultations: true,
+        chronic_conditions: true,
+        prescriptions: true,
+        observations: true,
+        insurance: true,
+        admissions: true,
+      },
+    });
+    return {
+      success: true,
+      message: 'all patients found!',
+      data: {
+        patients,
+      },
+    };
   }
 
   async findOne(id: number) {

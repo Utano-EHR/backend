@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Baho Hospital",
+    "street_address": "6. mutare avenue",
+    "city": "Mutare",
+    "phone": "256777333222",
+    "email": "bahohospital@gmail.com"
+  },
+  {
+    "name": "Spring Life Hospital",
+    "street_address": "8. Harare avenue",
+    "city": "Harare",
+    "phone": "2567773331122",
+    "email": "springlifehospital@gmail.com"
+  },
+  {
+    "name": "Bulawayo Central Hospital",
+    "street_address": "5 & 6. Bulawayo avenue",
+    "city": "Bulawayo",
+    "phone": "256777311234",
+    "email": "bulawayocentralhospital@gmail.com"
+  }
+]

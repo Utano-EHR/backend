@@ -18,19 +18,40 @@ export class HospitalService {
         },
       },
     };
-    await this.db.hospital.create({ data });
+    const hospital = await this.db.hospital.create({ data });
     return {
       success: true,
       message: 'Hospital created successfully',
+      data: {
+        hospital,
+      },
     };
   }
 
-  findAll() {
-    return `This action returns all hospital`;
+  async findAll() {
+    const hospitals = await this.db.hospital.findMany();
+    return {
+      success: true,
+      message: 'fetched all registered hospitals',
+      data: {
+        hospitals,
+      },
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} hospital`;
+  async findOne(id: number) {
+    const hospital = await this.db.hospital.findFirst({
+      where: {
+        id,
+      },
+    });
+    return {
+      success: true,
+      message: 'fetched hospital',
+      data: {
+        hospital,
+      },
+    };
   }
 
   /**

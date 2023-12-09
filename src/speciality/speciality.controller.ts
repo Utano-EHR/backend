@@ -27,6 +27,11 @@ export class SpecialityController {
     return this.specialityService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: number) {
+    return this.specialityService.findOne(+id);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: number,
