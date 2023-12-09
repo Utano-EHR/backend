@@ -5,6 +5,7 @@ import { CitySeed } from './seed.cities';
 import { InsuranceSeed } from './seed.insurance';
 import { SpecialitySeed } from './seed.specialities';
 import { ChronicConditionSeed } from './seed.chronic_conditions';
+import { HospitalSeed } from './seed.hospitals';
 import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
@@ -16,6 +17,7 @@ import { DatabaseModule } from 'src/database/database.module';
     InsuranceSeed,
     SpecialitySeed,
     ChronicConditionSeed,
+    HospitalSeed,
   ],
 })
 export class SeederModule {}

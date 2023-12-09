@@ -19,13 +19,32 @@ export class InsuranceService {
     };
   }
 
-  findAll() {
-    return `This action returns all insurance`;
+  async findAll() {
+    const insurances = await this.db.insurance.findMany();
+    return {
+      success: true,
+      message: 'all insurances found!',
+      data: {
+        insurances,
+      },
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} insurance`;
+  async findOne(id: number) {
+    const insurance = await this.db.insurance.findFirst({
+      where: {
+        id,
+      },
+    });
+    return {
+      success: true,
+      message: 'insurance found!',
+      data: {
+        insurance,
+      },
+    };
   }
+  // 02058347
 
   async update(id: number, dto: UpdateInsuranceDto) {
     if (dto.name) {

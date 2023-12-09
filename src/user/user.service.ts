@@ -6,8 +6,28 @@ import { DatabaseService } from 'src/database/database.service';
 export class UserService {
   constructor(private readonly db: DatabaseService) {}
 
-  findAll() {
-    return `This action returns all user`;
+  async findAll() {
+    let users = await this.db.user.findMany({
+      include: {
+        hospital: true,
+        speciality: true,
+        consultations: true,
+        appointments: true,
+        prescriptions: true,
+      },
+    });
+    users = users.map((u) => {
+      delete u.password;
+      return u;
+    });
+
+    return {
+      success: true,
+      message: 'all users found!',
+      data: {
+        users,
+      },
+    };
   }
 
   async findOne(id: number) {

@@ -8,29 +8,50 @@ export class HospitalService {
   constructor(private readonly db: DatabaseService) {}
 
   async create(dto: CreateHospitalDto) {
-    const { city, ...restDto } = dto;
+    const { city_id, ...restDto } = dto;
     const data = {
       ...restDto,
       slug: dto.name.toLowerCase().replace(/ /g, '-'),
       city: {
         connect: {
-          slug: city.toLowerCase().replace(/ /g, '-'),
+          id: city_id,
         },
       },
     };
-    await this.db.hospital.create({ data });
+    const hospital = await this.db.hospital.create({ data });
     return {
       success: true,
       message: 'Hospital created successfully',
+      data: {
+        hospital,
+      },
     };
   }
 
-  findAll() {
-    return `This action returns all hospital`;
+  async findAll() {
+    const hospitals = await this.db.hospital.findMany();
+    return {
+      success: true,
+      message: 'fetched all registered hospitals',
+      data: {
+        hospitals,
+      },
+    };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} hospital`;
+  async findOne(id: number) {
+    const hospital = await this.db.hospital.findFirst({
+      where: {
+        id,
+      },
+    });
+    return {
+      success: true,
+      message: 'fetched hospital',
+      data: {
+        hospital,
+      },
+    };
   }
 
   /**

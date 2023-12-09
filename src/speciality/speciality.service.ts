@@ -19,8 +19,31 @@ export class SpecialityService {
     };
   }
 
-  findAll() {
-    return `This action returns all speciality`;
+  async findAll() {
+    const specialities = await this.db.speciality.findMany();
+
+    return {
+      success: true,
+      message: 'all specialities',
+      data: {
+        specialities,
+      },
+    };
+  }
+
+  async findOne(id: number) {
+    const speciality = await this.db.speciality.findFirst({
+      where: {
+        id,
+      },
+    });
+    return {
+      success: true,
+      message: 'speciality found!',
+      data: {
+        speciality,
+      },
+    };
   }
 
   async update(id: number, dto: UpdateSpecialityDto) {
