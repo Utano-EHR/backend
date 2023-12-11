@@ -1,7 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
-import * as fs from 'fs';
-import * as path from 'path';
+import { fs, path, Injectable, DatabaseService } from './index';
 
 @Injectable()
 export class HospitalSeed {
@@ -14,14 +11,20 @@ export class HospitalSeed {
     const hospitals = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
     for (const hospital of hospitals) {
-      await this.db.insurance.create({
+      const { city_id, ...rest } = hospital;
+      await this.db.hospital.create({
         data: {
-          ...hospital,
+          ...rest,
           slug: hospital.name.toLowerCase().replace(/ /g, '-'),
+          city: {
+            connect: {
+              id: city_id,
+            },
+          },
         },
       });
     }
 
-    console.log('Hospital data seeded successfully');
+    console.log('Hospitals data seeded successfully');
   }
 }

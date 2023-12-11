@@ -1,0 +1,64 @@
+[
+  {
+    "firstname": "Anesu",
+    "lastname": "Kafesu",
+    "email": "anesukafesu@gmail.com",
+    "password": "zuzuxu",
+    "speciality_id": 1,
+    "role_id": 1,
+    "nationality_id": 54,
+    "national_identity": "Z0075844",
+    "hospital_id": 2
+  },
+  {
+    "firstname": "Cynthia",
+    "lastname": "Nekesa",
+    "email": "c.nekesa@gmail.com",
+    "password": "zuzuxu",
+    "role_id": 2,
+    "nationality_id": 24,
+    "national_identity": "Y0075944",
+    "hospital_id": 1
+  },
+  {
+    "firstname": "Nina",
+    "lastname": "Mwangi",
+    "email": "ninamwangi@gmail.com",
+    "password": "zuzuxu",
+    "role_id": 4,
+    "nationality_id": 24,
+    "national_identity": "X0075944",
+    "hospital_id": 3
+  },
+  {
+    "firstname": "Emmanuel",
+    "lastname": "Nyandongo",
+    "email": "e.nyandongo@gmail.com",
+    "password": "zuzuxu",
+    "speciality_id": 2,
+    "role_id": 1,
+    "nationality_id": 54,
+    "national_identity": "W0075944",
+    "hospital_id": 3
+  },
+  {
+    "firstname": "Hammid",
+    "lastname": "Abdulazeez",
+    "email": "h.abdulazeez@gmail.com",
+    "password": "zuzuxu",
+    "role_id": 4,
+    "nationality_id": 37,
+    "national_identity": "Q0075944",
+    "hospital_id": 1
+  },
+  {
+    "firstname": "Sam",
+    "lastname": "Olubode",
+    "email": "s.olubode@gmail.com",
+    "password": "zuzuxu",
+    "role_id": 3,
+    "nationality_id": 37,
+    "national_identity": "R0075944",
+    "hospital_id": 2
+  }
+]

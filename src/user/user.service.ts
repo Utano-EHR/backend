@@ -10,6 +10,7 @@ export class UserService {
     let users = await this.db.user.findMany({
       include: {
         hospital: true,
+        nationality: true,
         speciality: true,
         consultations: true,
         appointments: true,
@@ -37,6 +38,7 @@ export class UserService {
       },
       include: {
         hospital: true,
+        nationality: true,
         speciality: true,
         consultations: true,
         appointments: true,
@@ -59,6 +61,7 @@ export class UserService {
       data: dto,
       include: {
         hospital: true,
+        nationality: true,
         speciality: true,
         consultations: true,
         appointments: true,

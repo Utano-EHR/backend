@@ -21,7 +21,7 @@ export class AuthService {
 
     // IF ROLE IS DOCTOR AND NO HOSPITAL ID OR SPECIALITY ID
     // RETURN ERROR
-    if (dto.role === 'DOCTOR' && !(hospital_id && speciality_id)) {
+    if (dto.role_id === 1 && !(hospital_id && speciality_id)) {
       return {
         success: false,
         message: 'Hospital and speciality are required for doctors',
@@ -29,7 +29,7 @@ export class AuthService {
     }
 
     // IF ROLE IS NOT DOCTOR AND SPECIALITY ID IS SPECIFIED, RETURN ERROR
-    if (dto.role !== 'DOCTOR' && speciality_id) {
+    if (dto.role_id !== 1 && speciality_id) {
       return {
         success: false,
         message: 'Only doctors can have specialities',
@@ -45,6 +45,14 @@ export class AuthService {
       // @ts-ignore
       data: {
         ...dto,
+      },
+      include: {
+        hospital: true,
+        speciality: true,
+        nationality: true,
+        consultations: true,
+        appointments: true,
+        prescriptions: true,
       },
     });
 
@@ -81,6 +89,14 @@ export class AuthService {
     const user = await this.db.user.findFirst({
       where: {
         email: dto.email.toLowerCase(),
+      },
+      include: {
+        hospital: true,
+        speciality: true,
+        nationality: true,
+        consultations: true,
+        appointments: true,
+        prescriptions: true,
       },
     });
     if (!user) throw new ForbiddenException('Credentials incorrect');

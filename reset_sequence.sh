@@ -5,7 +5,7 @@ DB_USER="postgres"
 DB_NAME="utanodb"
 
 # List of table names to reset the serial ID sequence
-TABLES=("Province" "Insurance" "ChronicCondition" "Speciality" "City" "Hospital")
+TABLES=("Province" "Insurance" "ChronicCondition" "Speciality" "City" "Hospital" "User")
 
 # Iterate through the list of tables and reset the serial ID sequence
 for TABLE in "${TABLES[@]}"; do

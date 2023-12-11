@@ -7,6 +7,9 @@ import { SpecialitySeed } from './seed.specialities';
 import { ChronicConditionSeed } from './seed.chronic_conditions';
 import { HospitalSeed } from './seed.hospitals';
 import { DatabaseModule } from 'src/database/database.module';
+import { NationalitySeed } from './seed.nationalities';
+import { UserSeed } from './seed.users';
+import { RoleSeed } from './seed.roles';
 
 @Module({
   imports: [DatabaseModule],
@@ -18,6 +21,9 @@ import { DatabaseModule } from 'src/database/database.module';
     SpecialitySeed,
     ChronicConditionSeed,
     HospitalSeed,
+    NationalitySeed,
+    UserSeed,
+    RoleSeed,
   ],
 })
 export class SeederModule {}

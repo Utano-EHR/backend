@@ -16,10 +16,13 @@ model User {
   lastname      String
   email     String   @unique
   password  String
-  national_id String
-  nationality String
+  national_identity String @unique
 
-  role USER_ROLE
+  nationality_id Int
+  nationality Nationality @relation(fields: [nationality_id], references: [id])
+
+  role_id Int
+  role Role @relation(fields: [role_id], references: [id])
 
   hospital_id Int?
   hospital  Hospital? @relation(fields: [hospital_id], references: [id])
@@ -36,12 +39,22 @@ model User {
 
   @@index([lastname, firstname], name: "user_name_index")
 }
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  slug      String   @unique
+  Users User[]
+}
 
-enum USER_ROLE {
-  DOCTOR
-  RECEPTIONIST
-  LAB_TECHNICIAN
-  PHARMACIST
+model Nationality {
+  id        Int      @id @default(autoincrement())
+  name      String  @unique
+  slug      String
+
+  citizens User[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
 
 model Patient {

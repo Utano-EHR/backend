@@ -1,7 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
-import * as fs from 'fs';
-import * as path from 'path';
+import { fs, path, Injectable, DatabaseService } from './index';
 
 @Injectable()
 export class SpecialitySeed {
