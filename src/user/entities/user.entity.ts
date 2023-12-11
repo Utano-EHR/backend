@@ -5,7 +5,7 @@ import {
   Prescription,
   Speciality,
   Role,
-  Country,
+  Nationality,
 } from '@prisma/client';
 import { CoreEntity } from 'src/common/entities';
 
@@ -16,7 +16,7 @@ export class User extends CoreEntity {
   password?: string;
   national_identity: string;
   nation_id: number;
-  nationality: Country;
+  nationality: Nationality;
   role_id: number;
   role: Role;
   hospital_id?: number;
