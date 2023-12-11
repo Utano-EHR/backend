@@ -20,7 +20,7 @@ export class AuthService {
     const speciality_id = dto.speciality_id;
 
     // IF ROLE IS DOCTOR AND NO HOSPITAL ID OR SPECIALITY ID
-    // RETURN ERROR
+    // RETURN ERROR;
     if (dto.role_id === 1 && !(hospital_id && speciality_id)) {
       return {
         success: false,

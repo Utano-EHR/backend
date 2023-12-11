@@ -13,6 +13,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PatientModule } from './patient/patient.module';
 import { InsuranceModule } from './insurance/insurance.module';
 import { SeederModule } from './scripts/seeder.module';
+import { FetcherModule } from './fetcher/fetcher.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { SeederModule } from './scripts/seeder.module';
     PatientModule,
     InsuranceModule,
     SeederModule,
+    FetcherModule,
   ],
   controllers: [AppController],
   providers: [AppService],
