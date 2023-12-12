@@ -14,6 +14,12 @@ import { PatientModule } from './patient/patient.module';
 import { InsuranceModule } from './insurance/insurance.module';
 import { SeederModule } from './scripts/seeder.module';
 import { FetcherModule } from './fetcher/fetcher.module';
+import { PrescriptionModule } from './prescription/prescription.module';
+import { ConsultationModule } from './consultation/consultation.module';
+import { AppointmentModule } from './appointment/appointment.module';
+import { AdmissionModule } from './admission/admission.module';
+import { DischargeModule } from './discharge/discharge.module';
+import { ChronicconditionModule } from './chroniccondition/chroniccondition.module';
 
 @Module({
   imports: [
@@ -39,6 +45,12 @@ import { FetcherModule } from './fetcher/fetcher.module';
     InsuranceModule,
     SeederModule,
     FetcherModule,
+    PrescriptionModule,
+    ConsultationModule,
+    AppointmentModule,
+    AdmissionModule,
+    DischargeModule,
+    ChronicconditionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

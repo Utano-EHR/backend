@@ -13,6 +13,15 @@ export class PatientService {
 
     const patient = await this.db.patient.create({
       data,
+      include: {
+        appointments: true,
+        consultations: true,
+        chronic_conditions: true,
+        prescriptions: true,
+        observations: true,
+        insurance: true,
+        admissions: true,
+      },
     });
     return {
       success: true,

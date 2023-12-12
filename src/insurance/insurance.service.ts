@@ -20,7 +20,11 @@ export class InsuranceService {
   }
 
   async findAll() {
-    const insurances = await this.db.insurance.findMany();
+    const insurances = await this.db.insurance.findMany({
+      include: {
+        patients: true,
+      },
+    });
     return {
       success: true,
       message: 'all insurances found!',
@@ -35,6 +39,9 @@ export class InsuranceService {
       where: {
         id,
       },
+      include: {
+        patients: true,
+      },
     });
     return {
       success: true,
@@ -44,7 +51,6 @@ export class InsuranceService {
       },
     };
   }
-  // 02058347
 
   async update(id: number, dto: UpdateInsuranceDto) {
     if (dto.name) {
