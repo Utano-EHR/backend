@@ -45,8 +45,44 @@ export class AppointmentService {
     };
   }
 
-  async findAll() {
-    const appointments = await this.db.appointment.findMany();
+  async findAll(doctor_id: number | undefined) {
+    let appointments;
+    if (doctor_id) {
+      appointments = await this.db.appointment.findMany({
+        where: {
+          doctor_id,
+        },
+        include: {
+          doctor: {
+            select: {
+              id: true,
+              firstname: true,
+              lastname: true,
+              email: true,
+              hospital_id: true,
+              speciality: true,
+            },
+          },
+          patient: {
+            select: {
+              id: true,
+              firstname: true,
+              lastname: true,
+              email: true,
+              date_of_birth: true,
+              national_id: true,
+              mother_national_id: true,
+              father_national_id: true,
+              insurance_id: true,
+              allergies: true,
+              blood_group: true,
+            },
+          },
+        },
+      });
+    } else {
+      appointments = await this.db.appointment.findMany({});
+    }
     return {
       success: true,
       message: 'all appointments found!',

@@ -16,8 +16,6 @@ export class AuthService {
   ) {}
 
   async create(dto: CreateUserDto) {
-    console.log('Request Body:', dto);
-
     try {
       const hospital_id = dto.hospital_id;
       const speciality_id = dto.speciality_id;
@@ -26,6 +24,7 @@ export class AuthService {
       // RETURN ERROR;
       if (dto.role_id === 1 && !(hospital_id && speciality_id)) {
         return {
+          statusCode: 400,
           success: false,
           message: 'Hospital and speciality are required for doctors',
         };
@@ -34,6 +33,7 @@ export class AuthService {
       // IF ROLE IS NOT DOCTOR AND SPECIALITY ID IS SPECIFIED, RETURN ERROR
       if (dto.role_id !== 1 && speciality_id) {
         return {
+          statusCode: 400,
           success: false,
           message: 'Only doctors can have specialities',
         };
@@ -95,8 +95,6 @@ export class AuthService {
    * Login User
    */
   async login(dto: LoginDto) {
-    console.log('Request Body:', dto);
-
     try {
       const user = await this.db.user.findFirst({
         where: {
