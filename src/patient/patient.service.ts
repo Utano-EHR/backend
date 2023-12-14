@@ -57,7 +57,21 @@ export class PatientService {
         id,
       },
       include: {
-        appointments: true,
+        appointments: {
+          select: {
+            doctor: {
+              select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                email: true,
+                hospital_id: true,
+                speciality: true,
+              },
+            },
+            consultation: true,
+          },
+        },
         consultations: true,
         chronic_conditions: true,
         prescriptions: true,

@@ -11,6 +11,7 @@ import {
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
+import { queryAppointmentDto } from './dto/query-appointment.dto';
 
 @Controller('appointment')
 export class AppointmentController {
@@ -24,8 +25,8 @@ export class AppointmentController {
   }
 
   @Get()
-  findAll(@Query('doctor') id: string) {
-    return this.appointmentService.findAll(+id);
+  findAll(@Query() dto: queryAppointmentDto) {
+    return this.appointmentService.findAll(dto);
   }
 
   @Get(':id')

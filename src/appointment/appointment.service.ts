@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { DatabaseService } from 'src/database/database.service';
+import { queryAppointmentDto } from './dto/query-appointment.dto';
 
 @Injectable()
 export class AppointmentService {
@@ -117,17 +118,16 @@ export class AppointmentService {
     return appointments;
   }
 
-  async findAll(
-    doctor_id: number | undefined,
-    patient_id: number | undefined,
-  ) {
+  async findAll(dto: queryAppointmentDto) {
     let appointments;
-    if (doctor_id) {
-      appointments =
-        await this.filterAppointmentsByDoctorId(doctor_id);
-    } else if (patient_id) {
-      appointments =
-        await this.filterAppointmentsByPatientId(patient_id);
+    if (dto.doctor) {
+      appointments = await this.filterAppointmentsByDoctorId(
+        Number(dto.doctor),
+      );
+    } else if (dto.patient) {
+      appointments = await this.filterAppointmentsByPatientId(
+        Number(dto.patient),
+      );
     } else {
       appointments = await this.db.appointment.findMany({});
     }
